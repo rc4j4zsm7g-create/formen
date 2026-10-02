@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>formen — Брендові спортивні костюми</title>
+    <style>
+        :root {
+            --primary: #111;
+            --accent: #25d366;
+            --bg: #f9f9f9;
+            --card-bg: #fff;
+            --text: #333;
+            --gray: #777;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background: var(--bg); color: var(--text); padding-bottom: 50px; }
+        header { background: var(--primary); color: #fff; padding: 15px 20px; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 1px; }
+        
+        .container { max-width: 600px; margin: 0 auto; padding: 15px; }
+
+        /* Переключатель брендов */
+        .brand-switcher { display: flex; gap: 10px; margin-bottom: 20px; }
+        .brand-btn { flex: 1; padding: 12px; border: 2px solid #ddd; background: #fff; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .brand-btn.active { border-color: var(--primary); background: var(--primary); color: #fff; }
+
+        .card { background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden; padding: 20px; margin-bottom: 20px; }
+        
+        .gallery { width: 100%; height: 350px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; background: #eee; }
+        
+        h1 { font-size: 22px; margin-bottom: 5px; }
+        .price { font-size: 24px; font-weight: bold; color: #e44d26; margin-bottom: 15px; }
+        
+        .section-title { font-size: 14px; font-weight: bold; color: var(--gray); margin-bottom: 8px; text-transform: uppercase; }
+        
+        .options { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+        .opt-btn { padding: 10px 15px; border: 1px solid #ccc; background: #fff; border-radius: 6px; cursor: pointer; font-size: 14px; transition: 0.2s; }
+        .opt-btn.active { border-color: var(--primary); background: var(--primary); color: #fff; }
+
+        /* Калькулятор размера */
+        .size-calc { background: #f1f3f5; padding: 12px; border-radius: 8px; margin-bottom: 15px; }
+        .size-calc input { width: 48%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; margin-top: 5px; }
+        .calc-result { margin-top: 8px; font-weight: bold; color: #2b8a3e; font-size: 14px; }
+
+        /* Форма заказа */
+        .order-form { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px; }
+        .order-form input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 15px; }
+        
+        .submit-btn { background: var(--accent); color: #fff; border: none; padding: 15px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.2s; margin-top: 5px; }
+        .submit-btn:hover { opacity: 0.9; }
+    </style>
+</head>
+<body>
+
+    <header>formen</header>
+
+    <div class="container">
+        <!-- Выбор бренда -->
+        <div class="brand-switcher">
+            <button class="brand-btn active" onclick="switchBrand('lacoste')">Lacoste</button>
+            <button class="brand-btn" onclick="switchBrand('fredperry')">Fred Perry</button>
+        </div>
+
+        <div class="card">
+            <!-- Главное фото -->
+            <img id="productImage" class="gallery" src="" alt="Товар">
+            
+            <h1 id="productTitle">Спортивний костюм Lacoste</h1>
+            <div class="price" id="productPrice">1949 грн</div>
+
+            <!-- Выбор цвета -->
+            <div class="section-title">Виберіть колір:</div>
+            <div class="options" id="colorOptions"></div>
+
+            <!-- Выбор размера -->
+            <div class="section-title">Виберіть розмір:</div>
+            <div class="options" id="sizeOptions">
+                <button class="size-btn opt-btn" onclick="selectSize('S', this)">S</button>
+                <button class="size-btn opt-btn active" onclick="selectSize('M', this)">M</button>
+                <button class="size-btn opt-btn" onclick="selectSize('L', this)">L</button>
+                <button class="size-btn opt-btn" onclick="selectSize('XL', this)">XL</button>
+                <button class="size-btn opt-btn" onclick="selectSize('XXL', this)">XXL</button>
+            </div>
+
+            <!-- Калькулятор размера -->
+            <div class="size-calc">
+                <div style="font-size: 13px; font-weight: bold;">Підібрати розмір за параметрами:</div>
+                <div style="display: flex; justify-content: space-between;">
+                    <input type="number" id="heightInput" placeholder="Зріст (см)" oninput="calculateSize()">
+                    <input type="number" id="weightInput" placeholder="Вага (кг)" oninput="calculateSize()">
+                </div>
+                <div class="calc-result" id="calcResultText">Введіть зріст та вагу</div>
+            </div>
+
+            <!-- Форма заказа Новой Почты -->
+            <div class="order-form">
+                <div class="section-title" style="margin-bottom:0;">Швидке замовлення (Нова Пошта):</div>
+                <input type="text" id="clientName" placeholder="ПІБ отримувача">
+                <input type="tel" id="clientPhone" placeholder="Номер телефону">
+                <input type="text" id="clientCity" placeholder="Місто">
+                <input type="text" id="clientWarehouse" placeholder="№ відділення або поштомату">
+                
+                <button class="submit-btn" onclick="submitOrder()">Замовити за 1949 грн</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Данные товаров (ссылки взяты напрямую из предоставленных изображений)
+        const products = {
+            lacoste: {
+                title: "Спортивний костюм Lacoste",
+                price: "1949 грн",
+                colors: [
+                    { name: "Молочний", img: "https://generativelanguage.googleapis.com/v1beta/files/1d0a5198-d1a1-4328-912b-36fc19d45842" },[span_0](start_span)[span_0](end_span)
+                    { name: "Чорний", img: "https://generativelanguage.googleapis.com/v1beta/files/109c049e-b9ff-410a-bfa1-e5d4bc63b153" },[span_1](start_span)[span_1](end_span)
+                    { name: "Зелений", img: "https://generativelanguage.googleapis.com/v1beta/files/1c1fce0d-77ca-45ac-9b50-ac73e167cb4e" }[span_2](start_span)[span_2](end_span)
+                ]
+            },
+            fredperry: {
+                title: "Спортивний костюм Fred Perry",
+                price: "1949 грн",
+                colors: [
+                    { name: "Молочний", img: "https://generativelanguage.googleapis.com/v1beta/files/131464aa-9467-4286-90e6-a03503b41d08" },[span_3](start_span)[span_3](end_span)
+                    { name: "Чорний", img: "https://generativelanguage.googleapis.com/v1beta/files/1ab67055-6b5d-4f18-bb11-4ae8c8fcab41" },[span_4](start_span)[span_4](end_span)
+                    { name: "Блакитний", img: "https://generativelanguage.googleapis.com/v1beta/files/1d3f993f-c9a7-47c3-a3d2-d7b322dafa30" },[span_5](start_span)[span_5](end_span)
+                    { name: "Бордовий", img: "https://generativelanguage.googleapis.com/v1beta/files/17799017-9195-46fd-ab93-47e2bc490334" }[span_6](start_span)[span_6](end_span)
+                ]
+            }
+        };
+
+        let currentBrandKey = 'lacoste';
+        let selectedColor = '';
+        let selectedSize = 'M';
+
+        function switchBrand(brandKey) {
+            currentBrandKey = brandKey;
+            
+            // Кнопки брендов
+            document.querySelectorAll('.brand-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const prod = products[brandKey];
+            document.getElementById('productTitle').innerText = prod.title;
+            document.getElementById('productPrice').innerText = prod.price;
+            
+            // Рендер цветов
+            let colorHtml = '';
+            prod.colors.forEach((col, index) => {
+                colorHtml += `<button class="color-btn opt-btn ${index === 0 ? 'active' : ''}" onclick="selectColor('${col.name}', '${col.img}', this)">${col.name}</button>`;
+            });
+            document.getElementById('colorOptions').innerHTML = colorHtml;
+
+            // Выбрать первый цвет по умолчанию
+            selectColor(prod.colors[0].name, prod.colors[0].img, document.querySelector('.color-btn'));
+        }
+
+        function selectColor(name, imgUrl, element) {
+            selectedColor = name;
+            document.getElementById('productImage').src = imgUrl;
+            document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        function selectSize(size, element) {
+            selectedSize = size;
+            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        function calculateSize() {
+            let h = parseInt(document.getElementById('heightInput').value);
+            let w = parseInt(document.getElementById('weightInput').value);
+            let resText = document.getElementById('calcResultText');
+
+            if (!h || !w) {
+                resText.innerText = "Введіть зріст та вагу";
+                return;
+            }
+
+            let size = "M";
+            if (h < 168 && w < 65) size = "S";
+            else if (h >= 168 && h <= 175 && w >= 60 && w <= 75) size = "M";
+            else if (h > 175 && h <= 182 && w >= 70 && w <= 85) size = "L";
+            else if (h > 182 && h <= 190 && w >= 80 && w <= 95) size = "XL";
+            else if (h > 185 || w > 95) size = "XXL";
+
+            resText.innerText = `Рекомендований розмір: ${size}`;
+            
+            // Авто-выбор размера
+            document.querySelectorAll('.size-btn').forEach(b => {
+                if(b.innerText === size) {
+                    b.click();
+                }
+            });
+        }
+
+        function submitOrder() {
+            let name = document.getElementById('clientName').value;
+            let phone = document.getElementById('clientPhone').value;
+            let city = document.getElementById('clientCity').value;
+            let warehouse = document.getElementById('clientWarehouse').value;
+
+            if(!name || !phone || !city || !warehouse) {
+                alert("Будь ласка, заповніть усі поля для доставки!");
+                return;
+            }
+
+            let message = `🛒 Нове замовлення (formen)!\n\n` +
+                          `▪️ Товар: ${products[currentBrandKey].title}\n` +
+                          `▪️ Колір: ${selectedColor}\n` +
+                          `▪️️ Розмір: ${selectedSize}\n` +
+                          `▪️ Ціна: 1949 грн\n\n` +
+                          `👤 ПІБ: ${name}\n` +
+                          `📞 Телефон: ${phone}\n` +
+                          `🏙 Місто: ${city}\n` +
+                          `📦 Відділення: ${warehouse}`;
+
+            // Здесь можно заменить на отправку в твой бот или чат (например, через t.me или форму)
+            alert("Дякуємо за замовлення! Менеджер зв'яжеться з вами найближчим часом.");
+            console.log(message);
+        }
+
+        // Инициализация при загрузке
+        switchBrand('lacoste');
+    </script>
+</body>
+</html>
